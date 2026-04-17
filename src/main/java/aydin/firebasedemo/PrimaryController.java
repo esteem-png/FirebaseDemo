@@ -26,6 +26,8 @@ public class PrimaryController {
     @FXML
     private TextField ageTextField;
 
+    @FXML private TextField phoneTextField;
+
     @FXML
     private TextField nameTextField;
 
@@ -97,11 +99,22 @@ public class PrimaryController {
                 listOfUsers.clear();
                 for (QueryDocumentSnapshot document : documents)
                 {
-                    outputTextArea.setText(outputTextArea.getText()+ document.getData().get("Name")+ " , Age: "+
-                            document.getData().get("Age")+ " \n ");
+                    person = new Person(
+                            String.valueOf(document.getData().get("Name")),
+                            Integer.parseInt(document.getData().get("Age").toString()),
+                            String.valueOf(document.getData().get("PhoneNumber"))
+                    );
+
+                    outputTextArea.setText(
+                            outputTextArea.getText()
+                                    + "Name: " + person.getName()
+                                    + ", Age: " + person.getAge()
+                                    + ", Phone: " + person.getPhoneNumber()
+                                    + "\n"
+                    );
+
                     System.out.println(document.getId() + " => " + document.getData().get("Name"));
-                    person  = new Person(String.valueOf(document.getData().get("Name")),
-                            Integer.parseInt(document.getData().get("Age").toString()));
+
                     listOfUsers.add(person);
                 }
             }
@@ -145,13 +158,16 @@ public class PrimaryController {
 
     public void addData() {
 
-        DocumentReference docRef = DemoApp.fstore.collection("Persons").document(UUID.randomUUID().toString());
+        DocumentReference docRef =
+                DemoApp.fstore.collection("Persons")
+                        .document(UUID.randomUUID().toString());
 
         Map<String, Object> data = new HashMap<>();
+
         data.put("Name", nameTextField.getText());
         data.put("Age", Integer.parseInt(ageTextField.getText()));
+        data.put("PhoneNumber", phoneTextField.getText()); // 🔥 NEW
 
-        //asynchronously write data
-        ApiFuture<WriteResult> result = docRef.set(data);
+        docRef.set(data);
     }
 }

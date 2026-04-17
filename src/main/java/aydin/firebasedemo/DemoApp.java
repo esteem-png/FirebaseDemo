@@ -38,7 +38,7 @@ public class DemoApp extends Application {
         fstore = contxtFirebase.firebase();
         fauth = FirebaseAuth.getInstance();
 
-        scene = new Scene(loadFXML("primary"), 640, 480);
+        scene = new Scene(loadFXML("welcome"), 640, 480);
         stage.setScene(scene);
         stage.show();
     }
@@ -48,7 +48,9 @@ public class DemoApp extends Application {
     }
 
     private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(DemoApp.class.getResource(fxml + ".fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(
+                DemoApp.class.getResource("/aydin/firebasedemo/" + fxml + ".fxml")
+        );
         return fxmlLoader.load();
     }
 
